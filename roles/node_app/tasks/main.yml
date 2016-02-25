@@ -1,0 +1,16 @@
+---
+# This playbook will deploy the node app container. It requires docker to be installed (by running the docker module first)
+
+- name: Ensure Docker started
+  service: name=docker enabled=yes state=started
+
+- name: Fetch and deploy docker node container
+  docker:
+    name: simple-node
+    image: ananthpr/simple-node-app
+    state: reloaded
+    pull: always
+    # volumes:
+    # - "/opt/logs/node:/var/log/node:rwm"
+    ports:
+    - "4242:8080"
