@@ -26,4 +26,4 @@ This playbook uses the boto configuration on the machine it is run from, and per
   - Pulls and runs the nginx image
 
 ###### Note : 
-> In order to test this, it's a good idea to change the **env** variable in **site.yml**. This ensures that a new system is created from scratch. If you try to run this script on an env that's already been run by someone else, you might need to get the .pem file from them and store it in your **~/.ssh** folder. 
+> In order to test this, it's a good idea to change the **env** variable in **site.yml**. This ensures that a new system is created from scratch. If you try to run this script on an env that's already been run by someone else, you will need to get the .pem file from them and store it in your **~/.ssh** folder. 
