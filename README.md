@@ -1,13 +1,14 @@
-Building a simple node app, nginx container and deploying them to ec2
+Building an EC2 instance with a simple node app container served through an nginx container
 -------------------------------------------
+ This playbook is tested on OS X / Ubuntu 14.04
 
+## Requirements
+* You must have ansible installed and configured on the system running these scripts. Read the ansible documentation for more info
+* You must have Boto configured on the system running these scripts, with your AWS credentials either in the boto config files or on the appropriate environment variables. Read the boto docs for more info.
 
-These playbooks are meant to be a reference and starter's guide to building
-Ansible Playbooks. These playbooks were tested on Ubuntu 14.04
+If running the playbook to set up an EC2 instance, you need to run : 
 
-If running the playbook to set up an EC2 instance, you need to 
-
-        ansible-playbook  site.yml
+        ansible-playbook -vv -i hosts site.yml
 
 Once done, you can check the results by browsing to http://<instance IP / fqdn>
 You should see a simple test page 
