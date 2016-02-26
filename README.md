@@ -19,9 +19,9 @@ This playbook uses the boto configuration on the machine it is run from, and per
 - Creates the EC2 instance (in this case it's a t2.micro, ubuntu 14.04 instance)
 - Adds the instance to the in-memory inventory
 - Connects to the new instance using the keypair created and then 
--- Installs docker, docker-py etc
--- Pulls and runs the node image
--- Pulls and runs the nginx image
+  - Installs docker, docker-py etc
+  - Pulls and runs the node image
+  - Pulls and runs the nginx image
 
 
 In order to test this, it's a good idea to change the **env** variable in **site.yml**. This ensures that a new system is created from scratch. If you try to run this script on an env that's already been run by someone else, you might need to get the .pem file from them and store it in your **~/.ssh** folder. 
