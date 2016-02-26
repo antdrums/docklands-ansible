@@ -2,7 +2,7 @@ Building an EC2 instance with a simple node app container served through an ngin
 -------------------------------------------
  This playbook is tested on OS X / Ubuntu 14.04
 
--- Requirements
+### Requirements
 * You must have ansible installed and configured on the system running these scripts. Read the ansible documentation for more info
 * You must have Boto configured on the system running these scripts, with your AWS credentials either in the boto config files or on the appropriate environment variables. Read the boto docs for more info.
 
