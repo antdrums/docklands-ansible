@@ -7,10 +7,13 @@
 - name: Fetch and deploy docker node container
   docker:
     name: simple-node
-    image: ananthpr/simple-node-app
+    image: ananthpr/simple-node-container
     state: reloaded
+    docker_api_version: 1.18
+    net: bridge
     pull: always
-    # volumes:
-    # - "/opt/logs/node:/var/log/node:rwm"
+    volumes:
+    - "/opt/logs/node:/var/log/node:rw"
     ports:
     - "4242:8080"
+

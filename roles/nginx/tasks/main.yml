@@ -1,18 +1,20 @@
 ---
 # This playbook will deploy the nginx reverse proxy container. It requires docker to be installed (by running the docker module first)
 
-- name: Ensure Docker started
+- name: Ensure Docker is started
   service: name=docker enabled=yes state=started
 
 - name: Fetch and deploy docker nginx container
   docker:
     name: simple-nginx
-    image: ananthpr/simple-nginx
+    image: ananthpr/simple-nginx-container
     state: reloaded
+    docker_api_version: 1.18
+    net: bridge
     pull: always
     volumes:
-    - "/opt/logs/nginx:/var/log/nginx:rwm"
+    - "/opt/logs/nginx:/var/log/nginx:rw"
     ports:
     - "80:80"
     links:
-    - "simple-node:node"
+    - "simple-node:simple-node"

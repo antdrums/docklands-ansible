@@ -1,3 +1,24 @@
 ---
-- include: install_httpd.yml
+
+- name: Install Docker 
+  apt: pkg=docker.io update_cache=yes
+
+- name: Install requirements
+  apt: "name='{{ item }}' state=present"
+  with_items:
+    - git
+    - python-pip
+
+- name: Start Docker service
+  service: name=docker enabled=yes state=started
+
+- name: Install docker-py
+  pip: name=docker-py version=1.6.0
+
+- name: Path for nginx logs
+  file: path=/opt/logs/nginx state=directory mode=0766
+
+- name: Path for node logs
+  file: path=/opt/logs/node state=directory mode=0766
+
 

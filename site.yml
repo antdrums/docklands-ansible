@@ -13,13 +13,12 @@
   gather_facts: False
   tags: cloud
   vars:
-    instance_type: t1.micro
     env: "exercise" 
     remote_user: "ubuntu"
     remote_admin: "root"
-    aws_region: us-east-1d
+    aws_region: us-east-1
     instance_type: t2.micro 
-    ubuntu_14_04_ami: ami-b56566db
+    ubuntu_14_04_ami: ami-ff427095
   tasks:
   - name: Create security group
     ec2_group:
@@ -28,18 +27,15 @@
         region: "{{ aws_region }}"
         rules:
             - proto: tcp
-              type: ssh
               from_port: 22
               to_port: 22
               cidr_ip: 0.0.0.0/0
             - proto: tcp
-              type: http
               from_port: 80
               to_port: 80
               cidr_ip: 0.0.0.0/0
         rules_egress:
             - proto: all
-              type: all
               cidr_ip: 0.0.0.0/0
     register: simple_sg
 
@@ -50,12 +46,12 @@
     register: ec2_pem_key
 
   - name: Save private key
-    copy: content="{{ ec2_pem_key.private_key }}" dest="./{{ env }}-private-key.pem" mode=0600
+    copy: content="{{ ec2_pem_key.key.private_key }}" dest="~/.ssh/{{ env }}-key.pem" mode=0600
     when: ec2_pem_key.changed
 
   - name: Create required EC2 instance
     ec2:
-        key_name: "{{ env }}-private-key"
+        key_name: "{{ env }}-key"
         region: "{{ aws_region }}"
         group_id: "{{ simple_sg.group_id }}"
         instance_type: "{{ instance_type }}"
@@ -69,15 +65,20 @@
 
 
   - name: Add IP to ec2_hosts group
-    add_host: hostname={{ item.public_ip }} groups=ec2_hosts
+    add_host: 
+      hostname={{ item.public_ip }}
+      groups=ec2_hosts
+      ansible_ssh_user={{remote_user}}
+      ansible_ssh_private_key_file="{{ env }}-key.pem"
     with_items: ec2_instance.tagged_instances
 
   - name: Wait for SSH port to start listening
-    wait_for: host={{ item.public_dns_name }} port=22 delay=60 timeout=320 state=started
+    wait_for: host={{ item.public_dns_name }} port=22 delay=05 timeout=420 state=started
     with_items: ec2_instance.tagged_instances
 
 - name: Deploy on to created EC2 instances
   hosts: ec2_hosts
+  sudo: yes
   roles: 
     - docker
     - node_app
